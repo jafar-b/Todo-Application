@@ -2,6 +2,7 @@ const express=require("express");
 const mongoose=require("mongoose");
 const User=require("./dbsetup");
 const cors=require("cors");
+
 require("dotenv").config();
 const port=3001;
 const app=express();
@@ -16,7 +17,7 @@ console.log(err);
 }
 app.get("/",(req,res)=>{
     res.json(req.body)
-
+    
 
 })
 app.listen(port,()=>{

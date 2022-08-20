@@ -1,20 +1,13 @@
-import React from 'react';
-import './App.css';
-import Mainui from './Mainui';
-
+import React from "react";
+import "./App.css";
+import Mainui from "./Mainui";
 
 function App() {
   return (
-<>
-
-
-<Mainui/>
-</>
-    
- 
-          
-          );
+    <>
+      <Mainui />
+    </>
+  );
 }
 
 export default App;
- 
