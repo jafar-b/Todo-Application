@@ -38,7 +38,7 @@ export default function Mainui() {
   return (
     <>
       <div className="root">
-        <h1 className="heading-1"> WHAT IS UP..? </h1>
+        <h1 className="heading-1"> ToDo List </h1>
         <div className="main">
           <div className="container">
             <div className="heading">
