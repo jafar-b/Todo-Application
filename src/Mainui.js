@@ -51,9 +51,11 @@ export default function Mainui() {
                 placeholder="Add Items"
                 onChange={itemEvent}
               />
+
               <button type="submit" className="add" onClick={setItem}>
                 <b>+</b>
               </button>
+            
             </div>
             <ul className="list">
               {Itemarray.map((Itemval, index) => {
