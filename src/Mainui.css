@@ -1,6 +1,8 @@
+
 *{
     margin: 0;
     padding: 0;
+    
 }
 .root{
 
@@ -12,48 +14,45 @@
 box-shadow: 3px 3px 15px 5px rgb(124, 36, 36);
 
 }
+
+a{
+    color: rgb(255, 255, 255); 
+}
 .heading-1{
  color:white;
-    background-color: #303c6c;  
-    /* background-color:#f4976c; */
-    padding: 1rem 0rem 1rem 0rem;
-    
+ background-color: #303c6c;  
+
+ padding: 1rem 0rem 1rem 0rem;
+ 
 }
-svg{
-image-resolution: .625rem;
-}
-a{
+
+a{ 
     float: inline-end;
     margin-right:1rem;
 }
-/* pink #f4976c */
-/* blue #303c6c */
-/* skyblu #b4dfe5
-light blu d2fdff */
-/*
- background-color:#fbe8a6;
- background-color:#303c6c;
- background-color:#b4dfe5;
- background-color:#d2fdff; 
- */
+
  
  .main{
     background-color:#f4976c;
     display:flex;
+    /* position: relative; */
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 2rem;
     
 } 
 .container{
+    flex-direction: column;
     border-radius: 25px;
     background-color:#fbe8a6;
     width: fit-content;
     height: fit-content;
     justify-content: center;
     align-items: center;
+    align-self: center;
     align-content: center;
-    padding: 1rem 1rem 15rem 1rem;
+    padding: 1rem 1rem 2rem 1rem;
 
 }
 
@@ -66,7 +65,7 @@ light blu d2fdff */
 
 
 .cancel{
-    float: inline-end;
+    float: right;
     color: white ;
     background-color: #303c6c;  
     border: none;
@@ -104,10 +103,7 @@ light blu d2fdff */
     box-shadow: 1px 1px 5px 1px rgb(62, 110, 55);
     
 }
-/* .list{
-    
-   list-style-image: linear-gradient(to left bottom, red, blue); */
-    /* list-style-image: url("cancel.png"); */
+
 
   
 .items{
@@ -155,5 +151,3 @@ light blu d2fdff */
     box-shadow: 1px 2px 5px 2px darkgray ;
     transition: 0.3s ease;
 }
-
-
