@@ -3,12 +3,8 @@ import { useEffect } from "react";
 import "./Mainui.css";
 export default function Mainui() {
   const [newTodo, setNewTodo] = useState("");
-  const [todos, setTodo] = useState([]);
+  const [todos, setTodo] = useState(null);
 
-  const itemEvent = (event) => {
-    event.preventDefault();
-    console.log(event.target.value);
-  };
   // const handleSubmit = () => {
   //   fetch("http://localhost:3001/api", {
   //     method: "POST",
@@ -25,9 +21,7 @@ export default function Mainui() {
   //     Todo: "hello",
   //   };
 
-    
   // }, []);
-
 
   // useEffect(() => {
   //   // fetch todos from localhost at starting.
@@ -74,25 +68,20 @@ export default function Mainui() {
   //     setNewTodo("");
   //   }
   // };
-
-  const fetchdata=()=>{
-    fetch("http://localhost:3001/api/about",{
-    })
-    .then(response => {
-      return response.json()
-      
-    }).then(function (data) {
-      console.log(data);
-      
-    })
-    .catch(error => {
-     
-        console.log("Error in the fetch from backend!!!   -->"+error);
-    });
- 
-  }
-
-
+useEffect(()=>{
+    fetch("http://localhost:3001/api/alldata", {})
+      .then((response) => {
+        return response.json();
+      })
+      .then(function (data) {
+        setTodo(data)
+        console.log(todos);
+        console.log(data);
+      })
+      .catch((error) => {
+        console.log("Error in the fetch from backend!!!   -->" + error);
+      });
+  },[]);
 
   return (
     <>
@@ -118,14 +107,13 @@ export default function Mainui() {
                   className="workinput"
                   placeholder="Add Items"
                   value={newTodo}
-                  name="item"
+                  name="Todo"
                   onChange={(event) => {
                     setNewTodo(event.target.value);
-                    
                   }}
-                />
+                /> 
 
-                <button type="submit"  className="add">
+                <button type="submit" className="add">
                   <b>+</b>
                 </button>
               </div>
@@ -137,7 +125,7 @@ export default function Mainui() {
                     <button 
                       className="cancel"
                       onClick={() => {
-                        deleteItem(index);
+                        // deleteItem(index);
                       }} 
                     >
                       X 
@@ -149,11 +137,10 @@ export default function Mainui() {
 
               <button className="clear">CLEAR ALL</button>
             </form>
-              <button className="fetchdata" name="fetchdata" onClick={fetchdata}>FETCH DATA</button>
+          
           </div>
         </div>
       </div>
     </>
   );
-
 }
