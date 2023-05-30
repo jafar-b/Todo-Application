@@ -3,25 +3,7 @@ import { useEffect } from "react";
 import "./Mainui.css";
 export default function Mainui() {
   const [newTodo, setNewTodo] = useState("");
-  const [todos, setTodo] = useState(null);
-
-  // const handleSubmit = () => {
-  //   fetch("http://localhost:3001/api", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-type": "application/json",
-  //     },
-  //     body: JSON.stringify(),
-  //   })
-  //     .then((r) => r.json())
-  //     .then((response) => console.log(response));
-  // };
-  // useEffect(() => {
-  //   var obj = {
-  //     Todo: "hello",
-  //   };
-
-  // }, []);
+  const [todos, setTodo] = useState([]);
 
   // useEffect(() => {
   //   // fetch todos from localhost at starting.
@@ -68,20 +50,72 @@ export default function Mainui() {
   //     setNewTodo("");
   //   }
   // };
-useEffect(()=>{
-    fetch("http://localhost:3001/api/alldata", {})
+  // const fetchdata=fetch("http://localhost:3001/", {method:"POST", mode: "cors", credentials: "same-origin",  headers: {
+  //   "Content-Type": "application/json",
+  //   // 'Content-Type': 'application/x-www-form-urlencoded',
+  // }})
+  // .then((response) => {
+  //   return response.json();
+  // })
+  // .then(function (data) {
+  //   setTodo(data)
+  //   console.log(todos);
+  //   console.log("hellobrother");
+  //   console.log(data.map(item => item.Todo));
+  // })
+  // .catch((error) => {
+  //   console.log("Error in the fetch from backend!!!   -->" + error);
+  // });
+
+  const deleteAll = () => {
+    try {
+      fetch("http://localhost:3001/deleteAll", { method: "DELETE" }).catch(
+        (e) => {
+          console.log(e);
+        }
+      );
+    } catch (e) {
+      console.log(e);
+      alert("Error Deleting Todos please check your connection");
+    }
+
+    alert("Deleted All Todos");
+    window.location.reload(true);
+  };
+
+  const deleteItem = (id) => {
+    fetch(`http://localhost:3001/${id}`, { method: "DELETE" })
       .then((response) => {
-        return response.json();
+        if (response.ok) {
+          console.log("Item deleted successfully");
+          // Perform any additional actions or UI updates as needed
+        } else {
+          console.log("Error deleting item");
+        }
       })
-      .then(function (data) {
-        setTodo(data)
-        console.log(todos);
+      .catch((error) => {
+        console.error("Error deleting item", error);
+      });
+    const updatedTodos = todos.filter((todo) => todo._id !== id);
+    setTodo(updatedTodos);
+  };
+
+  useEffect(() => {
+    const endpoint = "http://localhost:3001/getalltodos";
+    fetch(endpoint, {
+      method: "GET",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Handle the retrieved data
+        setTodo(data);
         console.log(data);
       })
       .catch((error) => {
-        console.log("Error in the fetch from backend!!!   -->" + error);
+        // Handle any errors that occurred during the request
+        console.error("Error:", error);
       });
-  },[]);
+  }, []);
 
   return (
     <>
@@ -100,7 +134,34 @@ useEffect(()=>{
             <div className="heading">
               <h1>SO WHAT'S THE PLAN TODAY?</h1>
             </div>
-            <form method="post" action="http://localhost:3001/api">
+            <form
+              method="post"
+              action="http://localhost:3001/api"
+              onSubmit={(event) => {
+                event.preventDefault();
+                fetch("http://localhost:3001/api", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({ Todo: newTodo }),
+                })
+                  .then((response) => {
+                    if (response.ok) {
+                      console.log("Item added successfully");
+                      // Perform any additional actions or UI updates as needed
+                    } else {
+                      console.log("Error adding item");
+                    }
+                  })
+                  .catch((error) => {
+                    console.error("Error adding item", error);
+                  });
+
+                // Reset the input field
+                setNewTodo("");
+              }}
+            >
               <div className="datainput">
                 <input
                   type="text"
@@ -108,36 +169,48 @@ useEffect(()=>{
                   placeholder="Add Items"
                   value={newTodo}
                   name="Todo"
+                  required
                   onChange={(event) => {
-                    setNewTodo(event.target.value);
+                    if (event.target.value === "" || event.target.value===null){ alert("Enter todo")
+                    }  setNewTodo(event.target.value);
                   }}
-                /> 
+                />
 
-                <button type="submit" className="add">
+                <button
+                  type="submit"
+                  className="add"
+                  onClick={(e) => {
+                
+                      const updatedTodos = todos.concat(e.target.value);
+                      window.location.reload(true);
+                      console.log(updatedTodos);
+                    
+                  }}
+                >
                   <b>+</b>
                 </button>
               </div>
-              {/* <ul className="list">
-              {todos.map((Itemval, index) => {
-                return ( 
+            </form>
+            <ul className="list">
+              {todos.map((value, index) => {
+                return (
                   <li className="items" key={index}>
-                    {Itemval}
-                    <button 
+                    {value.Todo}
+                    <button
                       className="cancel"
-                      onClick={() => {
-                        // deleteItem(index);
-                      }} 
+                      key={index}
+                      onClick={() => deleteItem(value._id)}
                     >
-                      X 
+                      X
                     </button>
                   </li>
                 );
               })}
-            </ul> */}
+            </ul>
 
-              <button className="clear">CLEAR ALL</button>
-            </form>
-          
+            <button className="clear" onClick={deleteAll}>
+              CLEAR ALL
+            </button>
           </div>
         </div>
       </div>
