@@ -1,12 +1,12 @@
 import express, { json, urlencoded } from "express";
-import bryptjs from "bcryptjs";
+import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
 import Todos from "./models/Todo.js";
 import cors from "cors";
+import User from "./models/Userlogin.js";
 const app = express();
 
 app.use(json());
-
 
 app.use(cors());
 let port = process.env.PORT || 3001;
@@ -33,21 +33,46 @@ app.post("/api", (req, res) => {
   res.status(200).json({ message: "data saved successfully" });
 });
 
-import User from "./models/Userlogin.js";
 app.post("/Register", (req, res) => {
-  const newUser = new User(req.body);
-  newUser.save().then(() => {
-  console.log("user saved successfully");
-  return res.json({successfull:"Userdetails saved Successfully"})
-  }).catch((err) => {
-    console.log("Error hai bro ==> " + err);
-    res.json({error:err})
-  });
+  const { fname, lname, email, pass } = req.body;
+  if (!fname || !lname || !email || !pass) {
+    return res.json({ message: "Please fill all the fields!" });
+  }
+
+  User.findOne({ email }).then((userExists) => {
+    if (userExists) {
+      console.log("user already exists");
+      return res.json({ error: "User already exists, please sign up." });
+    }
+    
+    bcrypt.hash(pass, 10, (err, hashedPassword) => {
+      if (err) {
+        console.log("Error hashing password: " + err);
+        return res.json({ error: "An error occurred while hashing the password." });
+      }
+    
+      const newUser = new User({fname, lname, email, pass:hashedPassword});
+      newUser.save()
+        .then(() => {
+          console.log("user saved successfully");
+          return res.json({ successful: "User details saved successfully" });
+        })
+        .catch((err) => {
+          console.log("Error: " + err);
+          return res.json({ error: err });
+        });
+    });
+  }); 
 });
 
-app.get("/Login",(req,res)=>{
+app.get("/Login",async (req, res) => {
+const {email,pass}=req.body;
+const Userexists=await User.findOne({email});
+if(!Userexists){
+  return res.json({"Error":"User does not exist please signup."})
+}
 
-})
+});
 
 app.delete("/deleteAll", (req, res) => {
   Todos.deleteMany({}).then((result) => {
