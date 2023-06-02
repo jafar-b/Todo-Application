@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
-import "./Mainui.css";
+import "./styles/Mainui.css";
 export default function Mainui() {
   const [newTodo, setNewTodo] = useState("");
   const [todos, setTodo] = useState([]);
