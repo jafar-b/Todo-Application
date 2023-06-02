@@ -171,22 +171,23 @@ export default function Mainui() {
                   name="Todo"
                   required
                   onChange={(event) => {
-                    if (event.target.value === "" || event.target.value===null){ alert("Enter todo")
-                    }  setNewTodo(event.target.value);
+                    setNewTodo(event.target.value);
                   }}
                 />
 
                 <button
                   type="submit"
                   className="add"
-                  onClick={(e) => {
-                
-                      const updatedTodos = todos.concat(e.target.value);
-                      window.location.reload(true);
-                      console.log(updatedTodos);
-                    
+                  onClick={(e) => { 
+                    const updatedTodos = todos.concat(e.target.value);
+                    if(newTodo===""){
+                      alert("Please enter a Todo!")
+                    }
+                    window.location.reload(true);
+                    console.log(updatedTodos);
                   }}
                 >
+
                   <b>+</b>
                 </button>
               </div>
