@@ -1,10 +1,13 @@
 import express, { json, urlencoded } from "express";
-
+import bryptjs from "bcryptjs";
 import mongoose from "mongoose";
 import Todos from "./models/Todo.js";
-const app = express();
-app.use(json());
 import cors from "cors";
+const app = express();
+
+app.use(json());
+
+
 app.use(cors());
 let port = process.env.PORT || 3001;
 app.listen(port, () => {
@@ -29,6 +32,22 @@ app.post("/api", (req, res) => {
   todo.save().then(console.log("Item saved to database"));
   res.status(200).json({ message: "data saved successfully" });
 });
+
+import User from "./models/Userlogin.js";
+app.post("/Register", (req, res) => {
+  const newUser = new User(req.body);
+  newUser.save().then(() => {
+  console.log("user saved successfully");
+  return res.json({successfull:"Userdetails saved Successfully"})
+  }).catch((err) => {
+    console.log("Error hai bro ==> " + err);
+    res.json({error:err})
+  });
+});
+
+app.get("/Login",(req,res)=>{
+
+})
 
 app.delete("/deleteAll", (req, res) => {
   Todos.deleteMany({}).then((result) => {
